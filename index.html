@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS -->
+    <link rel="stylesheet" type="text/css" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/style.css">
+    <!-- GOOGLE FONTS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <title>BuzzQuizz</title>
+</head>
+<body>
+    <!--Try use semantic tags-->
+
+    <!-- Home Screen -->
+    <header class="">
+        <h1>BuzzQuizz</h1>
+    </header>
+
+    <main class="screen1">        
+        <article class="noUserQuizzes">
+            <span>Você não criou nenhum quizz ainda :(</span>
+            <span onclick="createQuizz();">Criar Quizz</span>
+        </article>
+
+        <section class="userQuizzes disabled">
+
+            <div>
+                <h1>Seus Quizzes</h1>
+                <ion-icon name="add-circle" onclick="createQuizz();"></ion-icon>
+            </div>
+
+            <article class="quizz">
+                <img src="./img/harry.jpg">
+                <span>Harry POTTAH</span>
+            </article>
+
+            <article class="quizz">
+                <img src="./img/harry.jpg">
+                <span>Harry POTTAH</span>
+            </article>
+
+            <article class="quizz">
+                <img src="./img/harry.jpg">
+                <span>Harry POTTAH</span>
+            </article>
+
+        </section>
+
+        <h1>Todos os Quizzes</h1>
+        <section class="allQuizzes">
+        
+            <article class="quizz">
+                <img src="./img/harry.jpg">
+                <span>Harry POTTAH</span>
+            </article>
+
+            
+
+                
+            
+            <!-- VÃO ENTRAR OS QUIZZES AQUI -->
+
+        </section>
+
+    </main>
+    
+    <!--Screen 2 -->
+    <section class="screen2 disabled">
+        <header class="bottomBoxHeader"> 
+        </header>
+
+        <div class="options ">
+
+        </div>
+
+        <article class="boxResult">
+        </article>
+        <nav class="returnOrReload disabled">
+            <button onclick="reload()">Reiniciar Quizz</button>
+            <button onclick="backToHome()" >Voltar pra home</button>
+        </nav>
+
+
+    </section>
+    
+
+    <!-- screen 3 -->
+    <main class="screen3 disabled">
+
+        <section class="quizzCreationStart disabled">
+
+            <h1>Comece pelo começo</h1>
+
+            <input id="quizzTitle" placeholder="   Título do quizz">
+            <input id="quizzImgURL" placeholder="   URL da imagem do seu quizz">
+            <input id="quizzQuestionsQuantity" placeholder="   Quantidade de perguntas do quizz">
+            <input id="quizzLevelsQuantity" placeholder="   Quantidade de níveis do quizz">
+
+            <button onclick="verifyAndGoToQuizzQuestions();">Prosseguir para criar perguntas</button>
+
+        </section>
+
+        <section class="quizzCreationQuestions disabled">
+
+            <h1>Crie suas perguntas</h1>
+            <!-- questions added with JS -->
+
+        </section>
+
+        <section class="quizzCreationLevels disabled">
+
+            <h1>Agora, decida os níveis!</h1>
+
+            <article class="level">
+                    <h2>Nível 1</h2>
+                    <input id="levelTitle" placeholder="   Título do nível">
+                    <input id="minimumPercentage" placeholder="   % de acerto mínima">
+                    <input id="levelImgURL" placeholder="   URL da imagem do nível">
+                    <input id="levelDescription" placeholder="   Descrição do nível">
+            </article>
+
+            <article class="minimized">
+                <h3>Nível 2</h3>
+                <ion-icon name="create-outline"></ion-icon>
+            </article>
+
+            <button onclick="verifyAndGoToQuizzFinished();">Finalizar Quizz</button>
+
+        </section>
+
+        <section class="quizzCreationFinish disabled">
+
+            <h1>Seu quizz está pronto!</h1>
+
+            <article class="quizzCreated">
+                <img src="./img/harry.jpg">
+                <span>Harry POTTAH</span>
+            </article>
+
+            <button>Acessar Quizz</button>
+            <button>Voltar pra home</button>
+
+        </section>
+
+    </main>
+
+
+    
+
+
+
+    
+
+
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>  
+    <script src="/script/script.js"></script> 
+    
+</body>
+</html>
