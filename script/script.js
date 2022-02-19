@@ -41,8 +41,7 @@ function quizz(number){
     header.innerHTML = `
     <h1>${object.title}</h1>
     <img src="${object.image}">`
-     
-    
+  
     let quizzesOptions = document.querySelector(".options");
     quizzesOptions.innerHTML = ``;
     
@@ -62,23 +61,19 @@ function quizz(number){
          `          
         }   
     }
-
-    header.scrollIntoView(backToHome);
-
     let disabled = document.querySelector(".screen1");
     disabled.classList.add("disabled");
     let enabled = document.querySelector(".screen2");
-    enabled.classList.remove("disabled");  
-
+    enabled.classList.remove("disabled"); 
+    let toTop = document.querySelector(".bottomBoxHeader");
+    toTop.scrollIntoView({block: "end", behavior: 'smooth'}); 
 }
 
 function selected (obj, p1, p2){
     let verifyChoices = arrayWithObjects[obj];
-   
-    console.log(objectTemp);
-    
-    
-    for(let j = 0; j< verifyChoices.questions[p1].answers.length; j++){
+ 
+    let lastQuestion = verifyChoices.questions[p1].answers.length
+    for(let j = 0; j< lastQuestion; j++){
        
         if(j==p2){
            
@@ -91,14 +86,12 @@ function selected (obj, p1, p2){
                 const change = document.querySelector(`.option.opt${p1}${j}`);
                 change.classList.add("wrong");
             }
-            
         }else{
             if(verifyChoices.questions[p1].answers[j].isCorrectAnswer == true){
                 const change = document.querySelector(`.option.opt${p1}${j}`);
                 change.classList.add("opacity");
                 change.classList.add("correct");
-                
-                
+    
             }else{
                 const change = document.querySelector(`.option.opt${p1}${j}`);
                 
@@ -107,19 +100,12 @@ function selected (obj, p1, p2){
                 
             }
         }
-        
-        let next = document.querySelector(`.option.opt${p1+1}${j}`);
+        let next = document.querySelector(`.opt${j}`);
 
-        setTimeout(() => {if(next!= null){next.scrollIntoView();}}, 2000);
-        
-            
-        
+        setTimeout(() => {if(next!= null){next.scrollIntoView({behavior: 'smooth'});}}, 2000);
+ 
      }
      choiced++;
-     
-     console.log("Choiced e hits");
-     console.log(choiced);
-     console.log(hits);
 
     if(choiced == qtdQuestions){
         setTimeout(finish,1000);   
@@ -127,38 +113,52 @@ function selected (obj, p1, p2){
         
 }
 
-   
-    
-
 function finish (){
     
     let score = (100/qtdQuestions)*hits;
     let round = Math.ceil(score);
+    let biggest = 0;
     
 
-    console.log(score);
-    console.log("Entrou");
+    
     for(let i = 0; i<objectTemp.levels.length; i++){
-        console.log("score e object level"+1);
-        console.log(score);
-        console.log(objectTemp.levels[i].minValue);
+        biggest = objectTemp.levels[i].minValue;
         if(score<=objectTemp.levels[i].minValue){
-            console.log("Entrou no if");
 
-           
+
+                      
             let result = document.querySelector(".boxResult");
             result.innerHTML = `
             <h1 class="title-result">${round}% de acerto: ${objectTemp.levels[i].title}}!</h1>
             <img src="${objectTemp.levels[i].image}">
             <h1 class="coments-result">${objectTemp.levels[i].text}</h1>
             `
-            result.scrollIntoView();
+            
+            let showBoxResult = document.querySelector(".boxResult");
+            let showBoxButtons = document.querySelector(".returnOrReload");
+            showBoxResult.classList.remove("disabled");
+            showBoxButtons.classList.remove("disabled");
+            showBoxButtons.scrollIntoView({behavior: 'smooth'});
+            break;
+        }
+        if(i+1 == objectTemp.levels.length){
+            if(score>=biggest){
+                     
+            let result = document.querySelector(".boxResult");
+            result.innerHTML = `
+            <h1 class="title-result">${round}% de acerto: ${objectTemp.levels[i].title}}!</h1>
+            <img src="${objectTemp.levels[i].image}">
+            <h1 class="coments-result">${objectTemp.levels[i].text}</h1>
+            `
+           
+            
             let showBoxResult = document.querySelector(".boxResult");
             showBoxResult.classList.remove("disabled");
             let showBoxButtons = document.querySelector(".returnOrReload");
             showBoxButtons.classList.remove("disabled");
-            
-            break;
+            showBoxButtons.scrollIntoView({behavior: 'smooth'});
+
+            }
         }
 
     }
@@ -181,7 +181,8 @@ function reload(){
     objectTemp=null;
     quizz(foundIn);
     
-
+    let toTop = document.querySelector(".bottomBoxHeader");
+    toTop.scrollIntoView({block: "end",behavior: 'smooth'});
     let ocultboxResult = document.querySelector(".boxResult");
     let ocultBoxButtons = document.querySelector(".returnOrReload");
     ocultboxResult.classList.add("disabled");
@@ -193,7 +194,6 @@ function reload(){
 function backToHome(){
     window.location.reload();
 }
-
 
 function comparador() { 
 	return Math.random() - 0.5; 
@@ -421,7 +421,7 @@ function verifyAndSaveQuestion () {
                 })
             }
         questionsNumber++;
-        console.log(createdQuizz);
+       
         return true
     }
     return false
