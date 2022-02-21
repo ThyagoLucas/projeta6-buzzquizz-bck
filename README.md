@@ -1,1 +1,0 @@
-# projeta6-buzzquizz-bck
