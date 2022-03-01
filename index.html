@@ -5,8 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- CSS -->
-    <link rel="stylesheet" type="text/css" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/reset.css">
+    <link rel="stylesheet" href="css/style.css">
     <!-- GOOGLE FONTS -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -55,7 +55,7 @@
         <div class="options ">
         </div>
 
-        <article class="boxResult disabled">
+        <article data-identifier="quizz-result" class="boxResult disabled">
         </article>
         <nav class="returnOrReload disabled">
             <button onclick="reload()">Reiniciar Quizz</button>
@@ -74,7 +74,7 @@
         <section class="quizzCreationStart">
             <h1>Comece pelo começo</h1>
 
-            <input id="quizzTitle" placeholder="   Título do quizz">
+            <input id="quizzTitle" placeholder="   Título do quizz" data-identifier="Título do seu quizz">
             <input id="quizzImgURL" placeholder="   URL da imagem do seu quizz">
             <input id="quizzQuestionsQuantity" placeholder="   Quantidade de perguntas do quizz">
             <input id="quizzLevelsQuantity" placeholder="   Quantidade de níveis do quizz">

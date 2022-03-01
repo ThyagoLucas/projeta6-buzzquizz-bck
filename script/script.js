@@ -39,7 +39,7 @@ function loadQuizzes(response){
     userQuizzes.innerHTML = `
         <div class="userQuizzesTitle">
             <h1>Seus Quizzes</h1>
-            <ion-icon name="add-circle" onclick="createQuizz();"></ion-icon>
+            <ion-icon data-identifier="create-quizz" name="add-circle" onclick="createQuizz();"></ion-icon>
         </div>
     `;
 
@@ -50,7 +50,7 @@ function loadQuizzes(response){
         const isAUsersQuizz = object.id == localStorage.getItem(object.title);
         if (isAUsersQuizz) {
             userQuizzes.innerHTML += `
-            <article class="quizz">
+            <article data-identifier="user-quizzes" class="quizz">
                 <img onclick="quizz(${i})" src="${object.image}">
                 <span onclick="quizz(${i})" >${object.title}</span>
                 <div class="quizzOptions">
@@ -62,7 +62,7 @@ function loadQuizzes(response){
             userHasQuizzes = true;
         } else {
             allquizes.innerHTML += `
-            <article class="quizz">
+            <article data-identifier="general-quizzes" class="quizz">
                 <img onclick="quizz(${i})" src="${object.image}">
                 <span onclick="quizz(${i})" >${object.title}</span>
             </article>
@@ -92,14 +92,14 @@ function quizz(number){
     
     for(let i = 0; i<object.questions.length; i++){
         quizzesOptions.innerHTML += `
-            <article class="option-quizz-selected opt${i}">`
+            <article data-identifier="question" class="option-quizz-selected opt${i}">`
             let choices = document.querySelector('.option-quizz-selected.opt'+i);
             choices.innerHTML += `<h1>${object.questions[i].title}</h1>`
             let response = object.questions[i].answers.sort(comparador);
         for(let j = 0; j< response.length;j++){
  
             choices.innerHTML += `
-            <figure class="option opt${i}${j}" onclick="selected(${number}, ${i}, ${j})">
+            <figure data-identifier="answer" class="option opt${i}${j}" onclick="selected(${number}, ${i}, ${j})">
                 <img src="${response[j].image}">
                 <figcaption>${response[j].text}</figcaption>
             </figure>
@@ -306,9 +306,6 @@ function verifyAndGoToQuizzQuestions () {
         const quizzCreationQuestions = document.querySelector(".quizzCreationQuestions");
         quizzCreationQuestions.classList.remove("disabled");
 
-        let selector = null;
-        let question = null;
-
         for (let i = 0; i < questionsQuantity; i++) {
             let questionForm = "disabled";
             let questionMinimized = "enabled";
@@ -316,61 +313,37 @@ function verifyAndGoToQuizzQuestions () {
                 questionForm = "enabled";
                 questionMinimized = "disabled";
             }
-
             quizzCreationQuestions.innerHTML += `
-            <section>
+            <section data-identifier="question">
                 <article class="question ${questionForm}">
                     <div class="questionTextImg">
                         <h2>Pergunta ${i + 1}</h2>
-                        <input id="questionText" placeholder="   Texto da pergunta">
-                        <input id="questionBackground-color" placeholder="   Cor de fundo da pergunta">
+                        <input id="questionText" placeholder="   Texto da pergunta" value=${quizzBeingEdited?.questions[i]?.title || ""}>
+                        <input id="questionBackground-color" placeholder="   Cor de fundo da pergunta" value=${quizzBeingEdited?.questions[i]?.color || ""}>
                     </div>
                     
                     <div class="correctAnswer">
                         <h2>Resposta correta</h2>
-                        <input id="correctAnswer" placeholder="   Resposta correta">
-                        <input id="correctAnswerImgURL" placeholder="   URL da imagem">
+                        <input id="correctAnswer" placeholder="   Resposta correta" value=${quizzBeingEdited?.questions[i]?.answers[0]?.text || ""}>
+                        <input id="correctAnswerImgURL" placeholder="   URL da imagem" value=${quizzBeingEdited?.questions[i]?.answers[0]?.image || ""}>
                     </div>
 
                     <div class="incorrectAnswers">
                         <h2>Respostas incorretas</h2>
-                        <input id="incorrectAnswer1" placeholder="   Resposta incorreta 1">
-                        <input id="incorrectAnswer1ImgURL" placeholder="   URL da imagem 1">
-                        <input id="incorrectAnswer2" placeholder="   Resposta incorreta 2">
-                        <input id="incorrectAnswer2ImgURL" placeholder="   URL da imagem 2">
-                        <input id="incorrectAnswer3" placeholder="   Resposta incorreta 3">
-                        <input id="incorrectAnswer3ImgURL" placeholder="   URL da imagem 3">
+                        <input id="incorrectAnswer1" placeholder="   Resposta incorreta 1" value=${quizzBeingEdited?.questions[i]?.answers[1]?.text || ""}>
+                        <input id="incorrectAnswer1ImgURL" placeholder="   URL da imagem 1" value=${quizzBeingEdited?.questions[i]?.answers[1]?.image || ""}>
+                        <input id="incorrectAnswer2" placeholder="   Resposta incorreta 2" value=${quizzBeingEdited?.questions[i]?.answers[2]?.text || ""}>
+                        <input id="incorrectAnswer2ImgURL" placeholder="   URL da imagem 2" value=${quizzBeingEdited?.questions[i]?.answers[2]?.image || ""}>
+                        <input id="incorrectAnswer3" placeholder="   Resposta incorreta 3" value=${quizzBeingEdited?.questions[i]?.answers[3]?.text || ""}>
+                        <input id="incorrectAnswer3ImgURL" placeholder="   URL da imagem 3" value=${quizzBeingEdited?.questions[i]?.answers[3]?.image || ""}>
                     </div>
                 </article>
-                <article class="minimized ${questionMinimized}" onclick="maximizeQuestion(this);">
+                <article class="minimized ${questionMinimized}" onclick="maximizeQuestion(this);" data-identifier="expand">
                     <h3>Pergunta ${i + 1}</h3>
                     <ion-icon name="create-outline"></ion-icon>
                 </article>
             </section>
             `;
-            if (editingQuizz) {
-                selector = `.quizzCreationQuestions section:nth-child(${i + 2})`;
-                question = document.querySelector(selector);
-                console.log(quizzBeingEdited.questions[i].title)
-                console.log(question)
-                console.log(question.querySelector("#questionText"))
-                question.querySelector("#questionText").value = quizzBeingEdited.questions[i].title;
-                question.querySelector("#questionBackground-color").value = quizzBeingEdited.questions[i].color;
-                question.querySelector("#correctAnswer").value = quizzBeingEdited.questions[i].answers[0].text;
-                question.querySelector("#correctAnswerImgURL").value = quizzBeingEdited.questions[i].answers[0].image;
-                question.querySelector("#incorrectAnswer1").value = quizzBeingEdited.questions[i].answers[1].text;
-                question.querySelector("#incorrectAnswer1ImgURL").value = quizzBeingEdited.questions[i].answers[1].image;
-
-                const thereIsAThirdAnswer = quizzBeingEdited.questions[i].answers[2] !== undefined
-                if (thereIsAThirdAnswer) {
-                    question.querySelector("#incorrectAnswer2").value = quizzBeingEdited.questions[i].answers[2].text;
-                    question.querySelector("#incorrectAnswer2ImgURL").value = quizzBeingEdited.questions[i].answers[2].image;
-                }
-                if (quizzBeingEdited.questions[i].answers[2] !== undefined) {
-                    question.querySelector("#incorrectAnswer3").value = quizzBeingEdited.questions[i].answers[3].text;
-                    question.querySelector("#incorrectAnswer3ImgURL").value = quizzBeingEdited.questions[i].answers[3].image;
-                }
-            }
         }
         quizzCreationQuestions.innerHTML += `
             <button onclick="GoToQuizzLevels();">Prosseguir pra criar níveis</button>
@@ -477,20 +450,21 @@ function GoToQuizzLevels () {
                 levelMinimized = "disabled";
             }
             quizzCreationLevels.innerHTML += `
-                <section>
+                <section data-identifier="level">
                     <article class="level ${levelExpanded}">
                             <h2>Nível ${i + 1}</h2>
-                            <input id="levelTitle" placeholder="   Título do nível">
-                            <input id="minimumPercentage" placeholder="   % de acerto mínima">
-                            <input id="levelImgURL" placeholder="   URL da imagem do nível">
-                            <input id="levelDescription" placeholder="   Descrição do nível">
+                            <input id="levelTitle" placeholder="   Título do nível" value=${quizzBeingEdited?.levels[i]?.title || ""}>
+                            <input id="minimumPercentage" placeholder="   % de acerto mínima" value=${quizzBeingEdited?.levels[i]?.minValue.toString() || ""}>
+                            <input id="levelImgURL" placeholder="   URL da imagem do nível" value=${quizzBeingEdited?.levels[i]?.image || ""}>
+                            <input id="levelDescription" placeholder="   Descrição do nível" value=${quizzBeingEdited?.levels[i]?.text || ""}>
                     </article>
-                    <article class="minimized ${levelMinimized}" onclick="maximizeLevel(this);">
+                    <article class="minimized ${levelMinimized}" onclick="maximizeLevel(this);" data-identifier="expand">
                             <h3>Nível ${i + 1}</h3>
                             <ion-icon name="create-outline"></ion-icon>
                     </article>
                 </section>
                 `;
+            
         }
         quizzCreationLevels.innerHTML += `
             <button onclick="verifyAndGoToQuizzFinished();">Finalizar Quizz</button>
@@ -549,6 +523,19 @@ function verifyAndSaveLevel (level) {
 function verifyAndGoToQuizzFinished () {
     const levels = document.querySelectorAll(".level");
     levels.forEach(verifyAndSaveLevel);
+    if (editingQuizz) {
+        const quizzID = localStorage.getItem(quizzBeingEdited.title);
+        const linkAPI = `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizzID}`
+        const quizzKEY = localStorage.getItem(quizzBeingEdited.title + "_KEY");
+        const objectHeader = { headers: { "Secret-Key": quizzKEY } };
+        const editQuizzPromisse = axios.put(linkAPI, createdQuizz, objectHeader);
+        editQuizzPromisse.then(
+            response => {
+            localStorage.setItem(createdQuizz.title, response.data.id);
+            localStorage.setItem(createdQuizz.title + "_KEY", response.data.key);
+            });
+
+    }
     if (zeroPercentageLevelExists && createdQuizz.levels.length === levelsQuantity) {
         const quizzCreationFinished = document.querySelector(".quizzCreationFinished");
         quizzCreationFinished.innerHTML = `
@@ -563,15 +550,16 @@ function verifyAndGoToQuizzFinished () {
 
             loading('quizzCreationLevels','quizzCreationFinished');
         
-
-        const createdQuizzPromisse =  axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", createdQuizz);
+        if (!editingQuizz) {
+        const createdQuizzPromisse = axios.post("https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes", createdQuizz);
         createdQuizzPromisse.then(
             response => {
                 localStorage.setItem(createdQuizz.title, response.data.id);
                 localStorage.setItem(createdQuizz.title + "_KEY", response.data.key);
-                getQuizzes();
                 idCreatedQuizz = response.data.id;
+                getQuizzes();
             });
+        }
         return
     }
     createdQuizz.levels = [];
@@ -581,37 +569,39 @@ function verifyAndGoToQuizzFinished () {
 function deleteQuizz (trash_can_icon) {
     const quizz = trash_can_icon.parentNode.parentNode;
     const quizzTitle = quizz.querySelector("span").innerText;
-    const quizzID = localStorage.getItem(quizzTitle);
-    const quizzKEY = localStorage.getItem(quizzTitle + "_KEY").toString();
-    const APIQuizzToDeleteLink = `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizzID}`;
-    const objectHeader = { headers: { "Secret-Key": quizzKEY } };
-    console.log(typeof objectHeader);
-    console.log(objectHeader);
-    const quizzDeletedPromisse = axios.delete(APIQuizzToDeleteLink, objectHeader);
-    quizzDeletedPromisse.then(
-        () => {
-            console.log("Quizz deletado!");
-            getQuizzes();
-    });
+    const yesToDelete = window.confirm(`O quizz ${quizzTitle} será deletado`);
+    if (yesToDelete) {
+        const quizzID = localStorage.getItem(quizzTitle);
+        const quizzKEY = localStorage.getItem(quizzTitle + "_KEY").toString();
+        const APIQuizzToDeleteLink = `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizzID}`;
+        const objectHeader = { headers: { "Secret-Key": quizzKEY } };
+        const quizzDeletedPromisse = axios.delete(APIQuizzToDeleteLink, objectHeader);
+        quizzDeletedPromisse.then(
+            () => {
+                alert("Quizz deletado!");
+                getQuizzes();
+            });
+    }
 }
 
 function editQuizz (edit_icon) {
-    const quizz = edit_icon.parentNode.parentNode;
-    const quizzTitle = quizz.querySelector("span").innerText;
-    const quizzID = localStorage.getItem(quizzTitle);
-    const quizzAPI = `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizzID}`;
-    const editQuizzPromisse = axios.get(quizzAPI);
-    editQuizzPromisse.then(
-        response => {
-            document.getElementById("quizzTitle").value = response.data.title;
-            document.getElementById("quizzImgURL").value = response.data.image;
-            document.getElementById("quizzQuestionsQuantity").value = response.data.questions.length;
-            document.getElementById("quizzLevelsQuantity").value = response.data.levels.length;
-            quizzBeingEdited = response.data;
-        }
-    );
-    createQuizz();
-    editingQuizz = true;
+    alert("Funcionalidade ainda não disponível")
+    // const quizz = edit_icon.parentNode.parentNode;
+    // const quizzTitle = quizz.querySelector("span").innerText;
+    // const quizzID = localStorage.getItem(quizzTitle);
+    // const quizzAPI = `https://mock-api.driven.com.br/api/v4/buzzquizz/quizzes/${quizzID}`;
+    // const editQuizzPromisse = axios.get(quizzAPI);
+    // editQuizzPromisse.then(
+    //     response => {
+    //         document.getElementById("quizzTitle").value = response.data.title;
+    //         document.getElementById("quizzImgURL").value = response.data.image;
+    //         document.getElementById("quizzQuestionsQuantity").value = response.data.questions.length;
+    //         document.getElementById("quizzLevelsQuantity").value = response.data.levels.length;
+    //         quizzBeingEdited = response.data;
+    //     }
+    // );
+    // createQuizz();
+    // editingQuizz = true;
     
 }
 function resetVariablesAndElements () {
@@ -633,22 +623,16 @@ function resetVariablesAndElements () {
 }
 
 function accessQuizz(){
-    resetVariablesAndElements;
+    
     for(let i = 0; i<arrayWithObjects.length; i++){
 
         if(idCreatedQuizz == arrayWithObjects[i].id){
-            console.log("achou!!")
-
-            console.log(idCreatedQuizz);
-            console.log(arrayWithObjects[i].id);
             quizz(i);
-            
         }
     }
 
     let disabledScreen4 = document.querySelector(".quizzCreationFinished");
     disabledScreen4.classList.add("disabled");
-    
   
 }
 
